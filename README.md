@@ -5,6 +5,10 @@
 Simple OpenGL bitmap font demo.
 Created to test [bmfont_rs](https://github.com/shampoofactory/bmfont_rs) in a standalone application.
 
+
+The code uses bare OpenGL calls as opposed to a wrapper such as [glium](https://github.com/glium/glium).
+As a consequence the codebase is quite dense. Most of the pain resides in the [glx](https://github.com/shampoofactory/moody_animals/tree/main/src/glx) module.
+
 ![Alt text](assets/screenshot.png)
 
 ## Build
