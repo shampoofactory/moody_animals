@@ -167,18 +167,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
-name = "flying_foo"
-version = "0.1.0"
-dependencies = [
- "bmfont_rs",
- "clap",
- "gl",
- "image",
- "rand",
- "sdl2",
-]
-
-[[package]]
 name = "getrandom"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -309,6 +297,18 @@ checksum = "a92518e98c078586bc6c934028adcca4c92a53d6a958196de835170a01d84e4b"
 dependencies = [
  "adler",
  "autocfg",
+]
+
+[[package]]
+name = "moody_animals"
+version = "0.1.0"
+dependencies = [
+ "bmfont_rs",
+ "clap",
+ "gl",
+ "image",
+ "rand",
+ "sdl2",
 ]
 
 [[package]]
