@@ -1,4 +1,5 @@
 ![MIT/Apache 2.0 Licensed](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue)
+[![Rust](https://github.com/shampoofactory/moody_animals/actions/workflows/rust.yml/badge.svg)](https://github.com/shampoofactory/moody_animals/actions)
 
 # moody_animals
 Simple OpenGL bitmap font demo.
