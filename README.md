@@ -29,6 +29,8 @@ $ target/release/moody_animals --help
 
 ## Run
 
+Press escape or close the window to stop the demo.
+
 Run windowed:
 ```
 $ moody_animals
