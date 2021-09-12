@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install SDL2 dev libraries
-      run: sudo apt-get install libsdl2-dev
     - name: Checkout repo
     - uses: actions/checkout@v2
+    - name: Install SDL2 dev libraries
+      run: sudo apt-get install libsdl2-dev    
     - name: Build
       run: cargo build --verbose
     - name: Run tests
