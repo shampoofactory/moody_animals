@@ -5,12 +5,13 @@ use crate::glx::objects::*;
 use crate::glx::types::*;
 
 use bmfont_rs::Char;
+use bmfont_rs::Font;
 use gl::types::*;
 use image::imageops;
 use image::{GrayImage, ImageFormat};
 
 use std::error::Error;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::BufReader;
 use std::mem;
 use std::path::Path;
@@ -45,8 +46,20 @@ impl FontMonkey {
         }
         let page = &font.pages[0];
 
-        let rdr = BufReader::new(File::open(folder.join(page))?);
-        let mut image = image::load(rdr, ImageFormat::Png).map(|u| u.into_luma8())?;
+        let image_data = fs::read(folder.join(page))?;
+
+        Self::load_static(font, &image_data, screen_width, screen_height, cap)
+    }
+
+    pub fn load_static(
+        font: Font,
+        image_data: &[u8],
+        screen_width: u32,
+        screen_height: u32,
+        cap: usize,
+    ) -> Result<Self, Box<dyn Error>> {
+        let mut image = image::load_from_memory_with_format(image_data, ImageFormat::Png)
+            .map(|u| u.into_luma8())?;
 
         if image.width() != font.common.scale_w as u32
             || image.height() != font.common.scale_h as u32

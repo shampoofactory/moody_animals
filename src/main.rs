@@ -14,9 +14,6 @@ use std::error::Error;
 use std::result::Result;
 use std::str::FromStr;
 
-const FONT_DIR: &str = "assets/fonts";
-const FONT_NAME: &str = "anton_latin.fnt";
-
 const TITLE: &str = "Demo";
 
 const CHAR_CAP: usize = 0x0400;
@@ -95,8 +92,11 @@ impl Demo {
     }
 
     pub fn execute(&mut self, p: f64, frame_hi: u32, frame_lo: u32) -> Result<(), Box<dyn Error>> {
+        let font = bmfont_rs::text::from_str(include_str!("../assets/fonts/anton_latin.fnt"))?;
+        let image_data = include_bytes!("../assets/fonts/anton_latin_0.png");
+
         let mut monkey =
-            glx::FontMonkey::load(FONT_DIR, FONT_NAME, self.width, self.height, CHAR_CAP)?;
+            glx::FontMonkey::load_static(font, image_data, self.width, self.height, CHAR_CAP)?;
         let mut words = DynWords::new(WORD_CAP, self.width, self.height, frame_hi, frame_lo, p);
         let blit = glx::Blit::build()?;
         unsafe {
@@ -158,7 +158,7 @@ fn arg_matches() -> ArgMatches<'static> {
                 .help("screen width")
                 .takes_value(true)
                 .default_value("1024")
-                .validator(|u| is_u32_filter(&u, |v| v <= u32::MAX))
+                .validator(|u| is_u32_filter(&u, |_| true))
                 .value_name("PIXELS"),
         )
         .arg(
@@ -168,7 +168,7 @@ fn arg_matches() -> ArgMatches<'static> {
                 .help("screen height")
                 .takes_value(true)
                 .default_value("768")
-                .validator(|u| is_u32_filter(&u, |v| v <= u32::MAX))
+                .validator(|u| is_u32_filter(&u, |_| true))
                 .value_name("PIXELS"),
         )
         .arg(
@@ -204,7 +204,7 @@ fn is_u32_filter<P>(v: &str, predicate: P) -> Result<(), String>
 where
     P: Fn(u32) -> bool,
 {
-    match u32::from_str_radix(&v, 10) {
+    match v.parse() {
         Ok(u) if predicate(u) => Ok(()),
         Ok(u) => Err(format!("invalid value: {}", u)),
         Err(err) => Err(err.to_string()),
@@ -212,10 +212,11 @@ where
 }
 
 fn get_u32(args: &ArgMatches, name: &str) -> u32 {
-    some_u32(args, name).expect(&format!("INTERNAL: default value error: {}", name))
+    some_u32(args, name).unwrap_or_else(|| panic!("INTERNAL: default value error: {}", name))
 }
 
 fn some_u32(args: &ArgMatches, name: &str) -> Option<u32> {
-    args.value_of(name)
-        .map(|u| u32::from_str(u).expect(&format!("INTERNAL: parse value error: {}", name)))
+    args.value_of(name).map(|u| {
+        u32::from_str(u).unwrap_or_else(|_| panic!("INTERNAL: parse value error: {}", name))
+    })
 }
