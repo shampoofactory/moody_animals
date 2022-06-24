@@ -12,7 +12,6 @@ use image::{GrayImage, ImageFormat};
 
 use std::error::Error;
 use std::fs::{self, File};
-use std::io::BufReader;
 use std::mem;
 use std::path::Path;
 use std::ptr;
